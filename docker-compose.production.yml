@@ -1,0 +1,28 @@
+services:
+  mongodb:
+    image: mongo:8
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - db-data:/data/db
+      - ./libs/utils/init-db.js:/docker-entrypoint-initdb.d/init-db.js:ro
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${DB_NAME}
+
+  reservations:
+    build:
+      context: .
+      dockerfile: ./apps/reservations/Dockerfile
+    env_file:
+      - .env.production
+    ports:
+      - '${PORT}:${PORT}'
+    depends_on:
+      - mongodb
+
+volumes:
+  db-data:
