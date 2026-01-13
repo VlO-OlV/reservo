@@ -15,7 +15,7 @@ RUN pnpm install
 
 COPY . .
 
-RUN pnpm run build reservations
+RUN pnpm run build auth
 
 FROM alpine AS production
 
@@ -33,4 +33,4 @@ RUN pnpm install --prod
 
 COPY --from=development /app/dist ./dist
 
-CMD ["node", "dist/apps/reservations/main"]
+CMD ["node", "dist/apps/auth/main"]

@@ -2,7 +2,7 @@ import { AbstractModel } from "@app/common";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { SchemaTypes } from "mongoose";
 
-@Schema({ versionKey: false, timestamps: true })
+@Schema()
 export class ReservationModel extends AbstractModel {
   @Prop({ type: SchemaTypes.Date })
   startDate: Date;

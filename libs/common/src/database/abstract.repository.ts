@@ -17,12 +17,12 @@ export abstract class AbstractRepository<TModel extends AbstractModel> {
     return savedDocument.toJSON();
   }
 
-  public async findOne(queryFilter: QueryFilter<TModel>): Promise<TModel> {
+  public async findOne(queryFilter: QueryFilter<TModel>, errorEnabled: boolean = true): Promise<TModel | null> {
     const document = await this.model.findOne(queryFilter).lean<TModel>(true);
 
     if (!document) {
       this.logger.warn('Document was not found with such queryFilter', queryFilter);
-      throw new NotFoundException('Document was not found');
+      if (errorEnabled) throw new NotFoundException('Document was not found');
     }
 
     return document;
@@ -34,7 +34,7 @@ export abstract class AbstractRepository<TModel extends AbstractModel> {
     await this.model.updateOne({ ...queryFilter }, { ...data });
 
     return {
-      ...existingDocument,
+      ...(existingDocument as TModel),
       ...data,
     };
   }
@@ -48,6 +48,6 @@ export abstract class AbstractRepository<TModel extends AbstractModel> {
 
     await this.model.deleteOne({ ...queryFilter });
 
-    return { ...existingDocument };
+    return { ...(existingDocument as TModel) };
   }
 }
