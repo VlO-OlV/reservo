@@ -1,7 +1,8 @@
+import { CreateChargeDto } from '@app/common';
 import { Type } from 'class-transformer';
-import { IsDate, IsNotEmpty, IsUUID } from 'class-validator';
+import { IsDate, IsNotEmpty } from 'class-validator';
 
-export class CreateReservationDto {
+export class CreateReservationDto extends CreateChargeDto {
   @IsNotEmpty()
   @IsDate()
   @Type(() => Date)
@@ -11,12 +12,4 @@ export class CreateReservationDto {
   @IsDate()
   @Type(() => Date)
   endDate: Date;
-
-  @IsNotEmpty()
-  @IsUUID()
-  placeId: string;
-
-  @IsNotEmpty()
-  @IsUUID()
-  invoiceId: string;
 }

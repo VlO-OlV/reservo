@@ -5,6 +5,10 @@ export default () => ({
     httpPort: parseInt(process.env.AUTH_HTTP_PORT as string, 10) || 3001,
     tcpPort: parseInt(process.env.AUTH_TCP_PORT as string, 10) || 3002,
   },
+  payments: {
+    host: process.env.PAYMENTS_HOST,
+    tcpPort: process.env.PAYMENTS_TCP_PORT,
+  },
   database: {
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -14,5 +18,8 @@ export default () => ({
   jwt: {
     secret: process.env.JWT_SECRET,
     ttl: process.env.JWT_TTL,
+  },
+  stripe: {
+    secretKey: process.env.STRIPE_SECRET_KEY,
   },
 });

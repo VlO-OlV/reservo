@@ -14,9 +14,6 @@ export class ReservationModel extends AbstractModel {
   userId: string;
 
   @Prop({ type: SchemaTypes.String })
-  placeId: string;
-
-  @Prop({ type: SchemaTypes.String })
   invoiceId: string;
 }
 
