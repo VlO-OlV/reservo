@@ -1,0 +1,62 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t',
+      'europe-north2-docker.pkg.dev/reservo-484717/reservations/production',
+      '-f',
+      'apps/reservations/Dockerfile',
+      '.',
+    ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'europe-north2-docker.pkg.dev/reservo-484717/reservations/production',
+    ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t',
+      'europe-north2-docker.pkg.dev/reservo-484717/auth/production',
+      '-f',
+      'apps/auth/Dockerfile',
+      '.',
+    ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'europe-north2-docker.pkg.dev/reservo-484717/auth/production',
+    ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t',
+      'europe-north2-docker.pkg.dev/reservo-484717/payments/production',
+      '-f',
+      'apps/payments/Dockerfile',
+      '.',
+    ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'europe-north2-docker.pkg.dev/reservo-484717/payments/production',
+    ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t',
+      'europe-north2-docker.pkg.dev/reservo-484717/notifications/production',
+      '-f',
+      'apps/notifications/Dockerfile',
+      '.',
+    ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'europe-north2-docker.pkg.dev/reservo-484717/notifications/production',
+    ]
+options:
+  logging: CLOUD_LOGGING_ONLY
