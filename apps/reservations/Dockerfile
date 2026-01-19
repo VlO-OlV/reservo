@@ -8,12 +8,17 @@ WORKDIR /app
 
 COPY package.json ./
 COPY pnpm-lock.yaml ./
+COPY tsconfig.json tsconfig.json
+COPY nest-cli.json nest-cli.json
 
 RUN npm i -g pnpm
 
 RUN pnpm install
 
-COPY . .
+COPY apps/reservations apps/reservations
+COPY libs libs
+
+RUN cd apps/reservations && pnpm install
 
 RUN pnpm run build reservations
 

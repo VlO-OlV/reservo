@@ -9,6 +9,10 @@ export default () => ({
     host: process.env.PAYMENTS_HOST,
     tcpPort: process.env.PAYMENTS_TCP_PORT,
   },
+  notifications: {
+    host: process.env.NOTIFICATIONS_HOST,
+    tcpPort: process.env.NOTIFICATIONS_TCP_PORT,
+  },
   database: {
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -21,5 +25,11 @@ export default () => ({
   },
   stripe: {
     secretKey: process.env.STRIPE_SECRET_KEY,
+  },
+  google: {
+    smtpUser: process.env.SMTP_USER,
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    clientRefresh: process.env.GOOGLE_CLIENT_REFRESH,
   },
 });

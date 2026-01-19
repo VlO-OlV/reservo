@@ -41,8 +41,15 @@ services:
       dockerfile: ./apps/payments/Dockerfile
     env_file:
       - .env.production
-    ports:
-      - '${PAYMENTS_TCP_PORT}:${PAYMENTS_TCP_PORT}'
+    depends_on:
+      - mongodb
+
+  notifications:
+    build:
+      context: .
+      dockerfile: ./apps/notifications/Dockerfile
+    env_file:
+      - .env.production
     depends_on:
       - mongodb
 

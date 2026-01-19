@@ -7,6 +7,8 @@ export const validationSchema = Joi.object({
   AUTH_HOST: Joi.string().required(),
   PAYMENTS_TCP_PORT: Joi.number().default(3003),
   PAYMENTS_HOST: Joi.string().required(),
+  NOTIFICATIONS_TCP_PORT: Joi.number().default(3004),
+  NOTIFICATIONS_HOST: Joi.string().required(),
   DB_HOST: Joi.string().required(),
   DB_USER: Joi.string().required(),
   DB_PASSWORD: Joi.string().required(),
@@ -14,4 +16,8 @@ export const validationSchema = Joi.object({
   JWT_SECRET: Joi.string().required(),
   JWT_TTL: Joi.number().required(),
   STRIPE_SECRET_KEY: Joi.string().required(),
+  SMTP_USER: Joi.string().required(),
+  GOOGLE_CLIENT_ID: Joi.string().required(),
+  GOOGLE_CLIENT_SECRET: Joi.string().required(),
+  GOOGLE_CLIENT_REFRESH: Joi.string().required(),
 });

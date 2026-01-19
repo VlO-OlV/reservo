@@ -15,12 +15,12 @@ RUN npm i -g pnpm
 
 RUN pnpm install
 
-COPY apps/payments apps/payments
+COPY apps/notifications apps/notifications
 COPY libs libs
 
-RUN cd apps/payments && pnpm install
+RUN cd apps/notifications && pnpm install
 
-RUN pnpm run build payments
+RUN pnpm run build notifications
 
 FROM alpine AS production
 
@@ -38,4 +38,4 @@ RUN pnpm install --prod
 
 COPY --from=development /app/dist ./dist
 
-CMD ["node", "dist/apps/payments/main"]
+CMD ["node", "dist/apps/notifications/main"]
