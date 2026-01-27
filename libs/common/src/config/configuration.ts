@@ -14,6 +14,7 @@ export default () => ({
     tcpPort: process.env.NOTIFICATIONS_TCP_PORT,
   },
   database: {
+    url: process.env.DB_URL,
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
