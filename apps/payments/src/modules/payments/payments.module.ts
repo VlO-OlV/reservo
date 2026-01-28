@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { PaymentsController } from './payments.controller';
 import { PaymentsService } from './payments.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { ConfigModule, NOTIFICATIONS_SERVICE } from '@app/common';
+import { NOTIFICATIONS_SERVICE } from '@app/common';
 import { ConfigService } from '@nestjs/config';
 
 @Module({
@@ -10,7 +10,6 @@ import { ConfigService } from '@nestjs/config';
     ClientsModule.registerAsync([
       {
         name: NOTIFICATIONS_SERVICE,
-        imports: [ConfigModule],
         inject: [ConfigService],
         useFactory: (configService: ConfigService) => ({
           transport: Transport.TCP,

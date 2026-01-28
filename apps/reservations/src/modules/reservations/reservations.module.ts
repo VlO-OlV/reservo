@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ReservationsController } from './reservations.controller';
 import { ReservationsService } from './reservations.service';
-import { AUTH_SERVICE, ConfigModule, DatabaseModule, PAYMENTS_SERVICE } from '@app/common';
+import { AUTH_SERVICE, DatabaseModule, PAYMENTS_SERVICE } from '@app/common';
 import { ReservationsRepository } from './reservations.repository';
 import { ReservationModel, ReservationSchema } from './models/reservation.schema';
 import { ClientsModule, Transport } from '@nestjs/microservices';
@@ -18,7 +18,6 @@ import { ConfigService } from '@nestjs/config';
     ClientsModule.registerAsync([
       {
         name: AUTH_SERVICE,
-        imports: [ConfigModule],
         inject: [ConfigService],
         useFactory: (configService: ConfigService) => ({
           transport: Transport.TCP,
@@ -30,7 +29,6 @@ import { ConfigService } from '@nestjs/config';
       },
       {
         name: PAYMENTS_SERVICE,
-        imports: [ConfigModule],
         inject: [ConfigService],
         useFactory: (configService: ConfigService) => ({
           transport: Transport.TCP,
