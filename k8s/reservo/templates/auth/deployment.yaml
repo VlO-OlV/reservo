@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: auth
+  name: auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: europe-north2-docker.pkg.dev/reservo-484717/auth/production
+          env:
+            - name: AUTH_HTTP_PORT
+              value: '3001'
+            - name: AUTH_TCP_PORT
+              value: '3002'
+            - name: JWT_TTL
+              value: '3600000'
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jwt
+                  key: jwtSecret
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb
+                  key: connectionString
+          ports:
+            - containerPort: 3001
+            - containerPort: 3002

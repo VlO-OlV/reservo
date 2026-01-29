@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: payments
+  name: payments
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payments
+  template:
+    metadata:
+      labels:
+        app: payments
+    spec:
+      containers:
+        - name: payments
+          image: europe-north2-docker.pkg.dev/reservo-484717/payments/production
+          env:
+            - name: PAYMENTS_TCP_PORT
+              value: '3003'
+            - name: NOTIFICATIONS_TCP_PORT
+              value: '3004'
+            - name: NOTIFICATIONS_HOST
+              value: notifications
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb
+                  key: connectionString
+            - name: STRIPE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stripe
+                  key: apiKey
+          ports:
+            - containerPort: 3003
