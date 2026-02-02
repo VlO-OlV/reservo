@@ -19,7 +19,6 @@ async function bootstrap() {
       port: tcpPort,
     },
   });
-  app.setGlobalPrefix('api');
   app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
