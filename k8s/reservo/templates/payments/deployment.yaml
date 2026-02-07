@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: payments
-          image: europe-north2-docker.pkg.dev/reservo-484717/payments/production
+          image: 711387108646.dkr.ecr.us-east-1.amazonaws.com/payments:latest # gcp - europe-north2-docker.pkg.dev/reservo-484717/payments/production
           env:
             - name: PAYMENTS_TCP_PORT
               value: '3003'

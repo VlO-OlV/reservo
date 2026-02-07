@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: reservations
-          image: europe-north2-docker.pkg.dev/reservo-484717/reservations/production
+          image: 711387108646.dkr.ecr.us-east-1.amazonaws.com/reservations:latest # gcp - europe-north2-docker.pkg.dev/reservo-484717/reservations/production
           env:
             - name: RESERVATIONS_PORT
               value: '3000'

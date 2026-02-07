@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: auth
-          image: europe-north2-docker.pkg.dev/reservo-484717/auth/production
+          image: 711387108646.dkr.ecr.us-east-1.amazonaws.com/auth:latest # gcp - europe-north2-docker.pkg.dev/reservo-484717/auth/production
           env:
             - name: AUTH_HTTP_PORT
               value: '3001'
