@@ -1,0 +1,65 @@
+services:
+  e2e:
+    build:
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./specs:/app/specs
+    depends_on:
+      - mongodb
+      - reservations
+      - auth
+      - payments
+      - notifications
+
+  mongodb:
+    image: mongo:8
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - db-data:/data/db
+      - ./libs/utils/init-db.js:/docker-entrypoint-initdb.d/init-db.js:ro
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${DB_NAME}
+
+  reservations:
+    image: 711387108646.dkr.ecr.us-east-1.amazonaws.com/reservations:latest
+    env_file:
+      - ../.env.production
+    ports:
+      - '${RESERVATIONS_PORT}:${RESERVATIONS_PORT}'
+    depends_on:
+      - mongodb
+
+  auth:
+    image: 711387108646.dkr.ecr.us-east-1.amazonaws.com/auth:latest
+    env_file:
+      - ../.env.production
+    ports:
+      - '${AUTH_HTTP_PORT}:${AUTH_HTTP_PORT}'
+    depends_on:
+      - mongodb
+
+  payments:
+    image: 711387108646.dkr.ecr.us-east-1.amazonaws.com/payments:latest
+    env_file:
+      - ../.env.production
+    ports:
+      - '${PAYMENTS_TCP_PORT}:${PAYMENTS_TCP_PORT}'
+    depends_on:
+      - mongodb
+
+  notifications:
+    image: 711387108646.dkr.ecr.us-east-1.amazonaws.com/notifications:latest
+    env_file:
+      - ../.env.production
+    ports:
+      - '${NOTIFICATIONS_TCP_PORT}:${NOTIFICATIONS_TCP_PORT}'
+    depends_on:
+      - mongodb
+
+volumes:
+  db-data:

@@ -1,0 +1,25 @@
+{
+  "name": "@reservo/e2e",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:start": "docker compose --env-file ../.env.production up e2e",
+    "test:stop": "docker compose --env-file ../.env.production down -v"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.27.0",
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.2.2",
+    "@types/tcp-ping": "^0.1.6",
+    "jest": "^30.2.0",
+    "tcp-ping": "^0.1.1",
+    "ts-jest": "^29.4.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
