@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
-import { CurrentUser, JwtGuard, UserDto } from '@app/common';
+import { CurrentUser, JwtGuard, Roles, UserDto } from '@app/common';
 
 @Controller('reservations')
 export class ReservationsController {
@@ -37,6 +37,7 @@ export class ReservationsController {
 
   @UseGuards(JwtGuard)
   @Delete(':id')
+  @Roles('Admin')
   async remove(@Param('id') id: string) {
     return this.reservationsService.deletById(id);
   }

@@ -9,6 +9,9 @@ export class UserModel extends AbstractModel {
 
   @Prop({ type: SchemaTypes.String })
   password: string;
+
+  @Prop()
+  roles?: string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserModel);
