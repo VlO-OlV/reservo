@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException, UnauthorizedExcepti
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UsersRepository } from "./users.repository";
 import * as bcrypt from 'bcryptjs';
+import { RoleEntity, UserEntity } from "@app/common";
 
 @Injectable()
 export class UsersService {
@@ -14,10 +15,13 @@ export class UsersService {
 
     if (existingUser) throw new BadRequestException('Such user already exists');
 
-    return this.usersRepository.create({
+    const user = new UserEntity({
       ...data,
       password: await bcrypt.hash(data.password, 10),
+      roles: data.roles?.map((role) => new RoleEntity(role)),
     });
+
+    return this.usersRepository.create(user);
   }
 
   public async verifyUser(email: string, password: string) {
@@ -31,7 +35,7 @@ export class UsersService {
   }
 
   public async findByEmail(email: string) {
-    return this.usersRepository.findOne({ email }, false);
+    return this.usersRepository.findOne({ email }, { roles: true }, false);
   }
 
   public async findById(id: string) {

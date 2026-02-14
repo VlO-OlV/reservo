@@ -3,17 +3,14 @@ import { ReservationsController } from './reservations.controller';
 import { ReservationsService } from './reservations.service';
 import { AUTH_SERVICE, DatabaseModule, PAYMENTS_SERVICE } from '@app/common';
 import { ReservationsRepository } from './reservations.repository';
-import { ReservationModel, ReservationSchema } from './models/reservation.schema';
+import { ReservationEntity } from './models/reservation.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     DatabaseModule.forFeature([
-      {
-        name: ReservationModel.name,
-        schema: ReservationSchema,
-      },
+      ReservationEntity,
     ]),
     ClientsModule.registerAsync([
       {

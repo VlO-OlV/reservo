@@ -2,16 +2,14 @@ import { Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { UsersRepository } from './users.repository';
-import { DatabaseModule } from '@app/common';
-import { UserModel, UserSchema } from './models/user.schema';
+import { DatabaseModule, RoleEntity } from '@app/common';
+import { UserEntity } from '@app/common';
 
 @Module({
   imports: [
     DatabaseModule.forFeature([
-      {
-        name: UserModel.name,
-        schema: UserSchema,
-      },
+      UserEntity,
+      RoleEntity,
     ]),
   ],
   controllers: [UsersController],

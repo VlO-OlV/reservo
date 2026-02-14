@@ -1,53 +1,50 @@
-import { Model, QueryFilter, UpdateQuery } from "mongoose";
-import { AbstractModel } from "./abstract.schema";
+import { AbstractEntity } from "./abstract.entity";
 import { Logger, NotFoundException } from "@nestjs/common";
+import { EntityManager, FindOptionsRelations, FindOptionsWhere, QueryDeepPartialEntity, Repository } from "typeorm";
 
-export abstract class AbstractRepository<TModel extends AbstractModel> {
+export abstract class AbstractRepository<T extends AbstractEntity<T>> {
   protected abstract readonly logger: Logger;
 
   constructor (
-    protected readonly model: Model<TModel>,
+    private readonly entityRepository: Repository<T>,
+    private readonly entityManager: EntityManager,
   ) {}
 
-  public async create(data: Omit<TModel, 'id' | 'createdAt' | 'updatedAt'>): Promise<TModel> {
-    const document = new this.model({
-      ...data,
-    });
-    const savedDocument = await document.save();
-    return savedDocument.toJSON();
+  public async create(data: T): Promise<T> {
+    return this.entityManager.save(data);
   }
 
-  public async findOne(queryFilter: QueryFilter<TModel>, errorEnabled: boolean = true): Promise<TModel | null> {
-    const document = await this.model.findOne(queryFilter).lean<TModel>(true);
+  public async findOne(where: FindOptionsWhere<T>, relations?: FindOptionsRelations<T>, errorEnabled: boolean = true): Promise<T | null> {
+    const entity = await this.entityRepository.findOne({ where, relations });
 
     if (!document) {
-      this.logger.warn('Document was not found with such queryFilter', queryFilter);
-      if (errorEnabled) throw new NotFoundException('Document was not found');
+      this.logger.warn('Entity was not found with such where', where);
+      if (errorEnabled) throw new NotFoundException('Entity was not found');
     }
 
-    return document;
+    return entity;
   }
 
-  public async updateOne(queryFilter: QueryFilter<TModel>, data: UpdateQuery<TModel>): Promise<TModel> {
-    const existingDocument = await this.findOne({ ...queryFilter });
+  public async updateOne(where: FindOptionsWhere<T>, data: QueryDeepPartialEntity<T>): Promise<T> {
+    const existingEntity = await this.findOne({ ...where });
 
-    await this.model.updateOne({ ...queryFilter }, { ...data });
+    await this.entityRepository.update({ ...where }, { ...data });
 
     return {
-      ...(existingDocument as TModel),
+      ...(existingEntity as T),
       ...data,
     };
   }
 
-  public async findMany(queryFilter: QueryFilter<TModel>): Promise<TModel[]> {
-    return this.model.find({ ...queryFilter }).lean<TModel[]>(true);
+  public async findMany(where: FindOptionsWhere<T>): Promise<T[]> {
+    return this.entityRepository.find({ where });
   }
 
-  public async deleteOne(queryFilter: QueryFilter<TModel>): Promise<TModel> {
-    const existingDocument = await this.findOne({ ...queryFilter });
+  public async deleteOne(where: FindOptionsWhere<T>): Promise<T> {
+    const existingDocument = await this.findOne({ ...where });
 
-    await this.model.deleteOne({ ...queryFilter });
+    await this.entityRepository.delete({ ...where });
 
-    return { ...(existingDocument as TModel) };
+    return { ...(existingDocument as T) };
   }
 }
