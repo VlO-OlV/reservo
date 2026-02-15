@@ -10,13 +10,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get<ConfigService>(ConfigService);
   const httpPort = configService.get<number>('auth.httpPort') as number;
-  const tcpPort = configService.get<number>('auth.tcpPort') as number;
+  const rabbitmqUrl = configService.get<string>('rabbitmq.url');
 
   app.connectMicroservice({
-    transport: Transport.TCP,
+    transport: Transport.RMQ,
     options: {
-      host: '0.0.0.0',
-      port: tcpPort,
+      urls: [rabbitmqUrl],
+      queue: 'auth',
     },
   });
   app.use(cookieParser());

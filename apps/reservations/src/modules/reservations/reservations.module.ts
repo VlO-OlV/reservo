@@ -17,10 +17,10 @@ import { ConfigService } from '@nestjs/config';
         name: AUTH_SERVICE,
         inject: [ConfigService],
         useFactory: (configService: ConfigService) => ({
-          transport: Transport.TCP,
+          transport: Transport.RMQ,
           options: {
-            host: configService.get<string>('auth.host'),
-            port: configService.get<number>('auth.tcpPort'),
+            urls: [configService.get<string>('rabbitmq.url') || ''],
+            queue: 'auth',
           },
         }),
       },
@@ -28,10 +28,10 @@ import { ConfigService } from '@nestjs/config';
         name: PAYMENTS_SERVICE,
         inject: [ConfigService],
         useFactory: (configService: ConfigService) => ({
-          transport: Transport.TCP,
+          transport: Transport.RMQ,
           options: {
-            host: configService.get<string>('payments.host'),
-            port: configService.get<number>('payments.tcpPort'),
+            urls: [configService.get<string>('rabbitmq.url') || ''],
+            queue: 'payments',
           },
         }),
       },

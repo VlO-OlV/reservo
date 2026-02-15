@@ -12,10 +12,10 @@ import { ConfigService } from '@nestjs/config';
         name: NOTIFICATIONS_SERVICE,
         inject: [ConfigService],
         useFactory: (configService: ConfigService) => ({
-          transport: Transport.TCP,
+          transport: Transport.RMQ,
           options: {
-            host: configService.get<string>('notifications.host'),
-            port: configService.get<number>('notifications.tcpPort'),
+            urls: [configService.get<string>('rabbitmq.url') || ''],
+            queue: 'notifications',
           },
         }),
       },
