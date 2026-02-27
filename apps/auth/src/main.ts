@@ -5,18 +5,20 @@ import { Logger } from 'nestjs-pino';
 import { AppModule } from './modules/app.module';
 import cookieParser from 'cookie-parser';
 import { Transport } from '@nestjs/microservices';
+import { AUTH_PACKAGE_NAME } from '@app/common';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get<ConfigService>(ConfigService);
   const httpPort = configService.get<number>('auth.httpPort') as number;
-  const rabbitmqUrl = configService.get<string>('rabbitmq.url');
 
   app.connectMicroservice({
-    transport: Transport.RMQ,
+    transport: Transport.GRPC,
     options: {
-      urls: [rabbitmqUrl],
-      queue: 'auth',
+      package: AUTH_PACKAGE_NAME,
+      protoPath: join(__dirname, '../../../proto/auth.proto'),
+      url: configService.get<string>('auth.grpcUrl'),
     },
   });
   app.use(cookieParser());

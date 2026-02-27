@@ -5,5 +5,5 @@ export const validationSchema = Joi.object({
   GOOGLE_CLIENT_ID: Joi.string().required(),
   GOOGLE_CLIENT_SECRET: Joi.string().required(),
   GOOGLE_CLIENT_REFRESH: Joi.string().required(),
-  RABBITMQ_URL: Joi.string().required(),
+  NOTIFICATIONS_GRPC_URL: Joi.string().required(),
 });

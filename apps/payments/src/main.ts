@@ -4,18 +4,19 @@ import { AppModule } from './modules/app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
+import { PAYMENTS_PACKAGE_NAME } from '@app/common';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get<ConfigService>(ConfigService);
-  const rabbitmqUrl = configService.get<string>('rabbitmq.url');
 
   app.connectMicroservice({
-    transport: Transport.RMQ,
+    transport: Transport.GRPC,
     options: {
-      urls: [rabbitmqUrl],
-      noAck: false,
-      queue: 'payments',
+      package: PAYMENTS_PACKAGE_NAME,
+      protoPath: join(__dirname, '../../../proto/payments.proto'),
+      url: configService.get<string>('payments.grpcUrl'),
     },
   });
   app.setGlobalPrefix('api');

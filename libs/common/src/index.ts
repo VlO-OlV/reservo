@@ -7,3 +7,4 @@ export * from './constants';
 export * from './dto';
 export * from './health';
 export * from './models';
+export * from './types';

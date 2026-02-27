@@ -1,18 +1,19 @@
-import { CreateChargeDto, NOTIFICATIONS_SERVICE } from '@app/common';
-import { Inject, Injectable } from '@nestjs/common';
+import { NOTIFICATIONS_SERVICE_NAME, NotificationsServiceClient } from '@app/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientGrpc } from '@nestjs/microservices';
 import Stripe from 'stripe';
 import { PaymentsCreateChargeDto } from './dto/payments-create-charge.dto';
 
 @Injectable()
-export class PaymentsService {
+export class PaymentsService implements OnModuleInit {
   private readonly stripe: Stripe;
+  private notificationsService: NotificationsServiceClient;
 
   public constructor(
     private readonly configService: ConfigService,
-    @Inject(NOTIFICATIONS_SERVICE)
-    private readonly notificationsService: ClientProxy,
+    @Inject(NOTIFICATIONS_SERVICE_NAME)
+    private readonly client: ClientGrpc,
   ) {
     this.stripe = new Stripe(
       configService.get<string>('stripe.secretKey') as string,
@@ -20,6 +21,10 @@ export class PaymentsService {
         apiVersion: '2025-12-15.clover'
       },
     );
+  }
+
+  onModuleInit() {
+    this.notificationsService = this.client.getService<NotificationsServiceClient>(NOTIFICATIONS_SERVICE_NAME);
   }
 
   public async createCharge({ card, amount, email }: PaymentsCreateChargeDto) {
@@ -40,7 +45,9 @@ export class PaymentsService {
       currency: 'usd',
     });
 
-    this.notificationsService.emit('notify_email', { email, text: 'Reservation confirmed' });
+    this.notificationsService
+      .notifyEmail({ email, text: 'Reservation confirmed' })
+      .subscribe(() => {});
 
     return paymentIntent;
   }
