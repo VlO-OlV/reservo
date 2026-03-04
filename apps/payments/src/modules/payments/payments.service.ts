@@ -18,7 +18,7 @@ export class PaymentsService implements OnModuleInit {
     this.stripe = new Stripe(
       configService.get<string>('stripe.secretKey') as string,
       {
-        apiVersion: '2025-12-15.clover'
+        apiVersion: '2026-02-25.clover'
       },
     );
   }

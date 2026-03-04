@@ -1,14 +1,15 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { AppModule } from './modules/app.modules';
 import { ConfigService } from '@nestjs/config';
-import { Logger } from 'nestjs-pino';
 import cookieParser from 'cookie-parser';
-import { AppModule } from './modules/app.module';
+import { ValidationPipe } from '@nestjs/common';
+import { Logger } from 'nestjs-pino';
+import { setApp } from './app';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get<ConfigService>(ConfigService);
-  const port = configService.get<number>('reservations.httpPort') as number;
+  const httpPort = configService.get<number>('gateway.httpPort') as number;
 
   app.use(cookieParser());
   app.useGlobalPipes(
@@ -19,8 +20,9 @@ async function bootstrap() {
   );
   app.useLogger(app.get(Logger));
 
-  await app.listen(port, () =>
-    console.log(`Reservations service successfully started on port ${port}`),
+  await app.listen(httpPort, () =>
+    console.log(`Gateway successfully started on port ${httpPort}`),
   );
+  setApp(app);
 }
 bootstrap();

@@ -1,14 +1,21 @@
 export default () => ({
-  reservationsPort: parseInt(process.env.RESERVATIONS_PORT as string, 10) || 3000,
+  reservations: {
+    httpPort: parseInt(process.env.RESERVATIONS_PORT as string, 10) || 3000,
+    graphQlUrl: process.env.RESERVATIONS_GRAPHQL_URL,
+  },
   auth: {
     httpPort: parseInt(process.env.AUTH_HTTP_PORT as string, 10) || 3001,
     grpcUrl: process.env.AUTH_GRPC_URL,
+    graphQlUrl: process.env.AUTH_GRAPHQL_URL,
   },
   payments: {
     grpcUrl: process.env.PAYMENTS_GRPC_URL,
   },
   notifications: {
     grpcUrl: process.env.NOTIFICATIONS_GRPC_URL,
+  },
+  gateway: {
+    httpPort: parseInt(process.env.GATEWAY_PORT as string, 10) || 3004,
   },
   database: {
     host: process.env.DB_HOST,

@@ -7,6 +7,7 @@ import { ReservationEntity } from './models/reservation.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
+import { ReservationsResolver } from './reservations.resolver';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { join } from 'path';
           transport: Transport.GRPC,
           options: {
             package: AUTH_PACKAGE_NAME,
-            protoPath: join(__dirname, '../../../../../proto/auth.proto'),
+            protoPath: join(__dirname, '../../../proto/auth.proto'),
             url: configService.get<string>('auth.grpcUrl'),
           },
         }),
@@ -33,7 +34,7 @@ import { join } from 'path';
           transport: Transport.GRPC,
           options: {
             package: PAYMENTS_PACKAGE_NAME,
-            protoPath: join(__dirname, '../../../../../proto/payments.proto'),
+            protoPath: join(__dirname, '../../../proto/payments.proto'),
             url: configService.get<string>('payments.grpcUrl'),
           },
         }),
@@ -41,6 +42,6 @@ import { join } from 'path';
     ]),
   ],
   controllers: [ReservationsController],
-  providers: [ReservationsService, ReservationsRepository],
+  providers: [ReservationsService, ReservationsRepository, ReservationsResolver],
 })
 export class ReservationsModule {}

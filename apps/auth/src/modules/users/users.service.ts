@@ -41,4 +41,8 @@ export class UsersService {
   public async findById(id: string) {
     return this.usersRepository.findOne({ id });
   }
+
+  public async findAll() {
+    return this.usersRepository.findMany({});
+  }
 }
